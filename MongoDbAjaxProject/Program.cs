@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Options;
 using MongoDbAjaxProject.DAL.Settings;
 
 namespace MongoDbAjaxProject
@@ -9,7 +10,12 @@ namespace MongoDbAjaxProject
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Services.AddSingleton<IDatabaseSettings>(sp =>
+            {
+                return sp.GetRequiredService<IOptions<DatabaseSettings>>().Value;
+            }
+                
+            );
             builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("DatabaseSettings"));
             builder.Services.AddControllersWithViews();
 

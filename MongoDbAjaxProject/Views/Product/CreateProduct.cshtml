@@ -1,0 +1,27 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "CreateProduct";
+    Layout = "~/Views/Shared/_MongoLayout.cshtml";
+}
+<h1>Yeni ürün girişi</h1>
+<div class="container">
+    <form method="Post">
+        <label>Ürün Adı</label>
+        <input type="text" asp-for="ProductName" class="form-control" style="border:1px solid #000" />
+        <br />
+
+        <label>Ürün Fiyatı</label>
+        <input type="text" asp-for="ProductPrice" class="form-control" style="border:1px solid #000" />
+        <br />
+
+        <label>Ürün Stoğu</label>
+        <input type="text" asp-for="ProductStock" class="form-control" style="border:1px solid #000" />
+        <br />
+
+        <label>Kategori ID</label>
+        <input type="text" asp-for="CategoryId" class="form-control" style="border:1px solid #000" />
+        <br />
+
+        <button class="btn btn-primary">Ekle </button>
+    </form>
+</div>

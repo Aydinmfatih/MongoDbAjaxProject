@@ -1,0 +1,17 @@
+﻿@model Category
+@{
+    Layout = "~/Views/Shared/_MongoLayout.cshtml";
+}
+
+
+<br />
+<br />
+<div class="container">
+    <form method="Post">
+        <input type="text" asp-for="CategoryId" />
+        <label>Kategori Adı</label>
+        <input type="text" asp-for="CategoryName" class="form-control" />
+        <br />
+        <button class="btn btn-primary">Güncelle </button>
+    </form>
+</div>
