@@ -1,0 +1,85 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MongoLayout.cshtml";
+}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<div class="container">
+    <br />
+    <h3>İşlem Butonları</h3>
+    <button type="button" id="btnemployeelist" class="btn btn-outline-primary">Personel Listesi</button>
+    <button type="button" id="btnemployeecreate" class="btn btn-outline-info">Personel Ekle</button>
+    <button type="button" id="btnemployeedelete" class="btn btn-outline-danger">Personel Sil</button>
+    <button type="button" id="btnemployeeget" class="btn btn-outline-dark">Personel Getir</button>
+    <button type="button" id="btnemployeeupdate" class="btn btn-outline-success">Personel Güncelle</button>
+</div>
+
+<br />
+<hr />
+<h3>Personel Listesi</h3>
+<div id="employeelist">
+</div>
+
+<hr />
+
+<h3>Yeni Personel Girişi</h3>
+<div>
+    <input type="text" class="form-control" placeholder="Personel Adı" id="txtname" style="border:1px solid #000" />
+    <br />
+    <input type="text" class="form-control" placeholder="Personel Soyadı" id="txtsurname" style="border:1px solid #000" />
+    <br />
+    <input type="text" class="form-control" placeholder="Personel Maaş" id="txtsalary" style="border:1px solid #000" />
+</div>
+<script>
+
+    $("#btnemployeelist").click(function () {
+        $.ajax({
+            contentType: "application/json",
+            dataType: "json",
+            type: "Get",
+            url: "/Employee/EmployeeList/",
+            success: function (funk1) {
+                let values = jQuery.parseJSON(funk1);
+                console.log(values);
+                let tablehtml = `<table class=table table-bordered>
+                    <tr>
+                    <th>Personel ID</th>
+                    <th>Personel Adı</th>
+                    <th>Personel Soyadı</th>
+                    <th>Personel Maaş</th>
+                    </tr>`
+
+                $.each(values, (index, value) => {
+                    tablehtml += `<tr>
+                     <td>${value.EmployeeId}</td>
+                     <td>${value.EmployeeName}</td>
+                     <td>${value.EmployeeSurname}</td>
+                     <td>${value.EmployeeSalary}</td>
+                     </tr>`
+
+                });
+                tablehtml += `</table>`;
+                $("#employeelist").html(tablehtml);
+            }
+        });
+    });
+
+    $("#btnemployeecreate").click(function (){
+        let employeevalues = {
+            EmployeeName: $("#txtname").val(),
+            EmployeeSurname: $("#txtsurname").val(),
+            EmployeeSalary: $("#txtsalary").val(),
+
+        };
+        $.ajax({
+            type:"post",
+            url:"/Employee/CreateEmployee/",
+            data:employeevalues,
+            success:function (funk2){
+                let result = jQuery.parseJSON(funk2);
+                alert("PErsonel başarıyla eklendi");
+            }
+        })
+    })
+</script>
