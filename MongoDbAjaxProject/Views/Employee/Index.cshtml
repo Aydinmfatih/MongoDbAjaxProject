@@ -31,6 +31,34 @@
     <br />
     <input type="text" class="form-control" placeholder="Personel Maaş" id="txtsalary" style="border:1px solid #000" />
 </div>
+<hr />
+
+
+
+<h3>Personel Getirme Paneli</h3>
+<input type="text" placeholder="Getimrek İstediğiniz Personel Id" id="txtemployeeid" style="border:1px solid #000" class="form-control" />
+<div id="employeelistbyid">
+    <hr />
+
+    <div>
+        <h3>Personel Silme alanı</h3>
+        <input type="text" class="form-control" placeholder="Silmek İstediğiniz Personel Id" id="txtdeletedemployeeid" style="border:1px solid #000" />
+        <br />
+    </div>
+</div>
+<hr />
+<div>
+    <h3>Personel Güncelleme Sayfası</h3>
+    <div>
+        <input type="text" class="form-control" placeholder="Güncellenecek Personel Id" id="txtidedit" style="border:1px solid #000" />
+        <br />
+        <input type="text" class="form-control" placeholder="Güncellenecek Personel Id" id="txtnameedit" style="border:1px solid #000" />
+        <br />
+        <input type="text" class="form-control" placeholder="Güncellenecek Personel Id" id="txtsurnameedit" style="border:1px solid #000" />
+
+        <input type="text" class="form-control" placeholder="Güncellenecek Personel Id" id="txtsalaryedit" style="border:1px solid #000" />
+    </div>
+</div>
 <script>
 
     $("#btnemployeelist").click(function () {
@@ -43,20 +71,20 @@
                 let values = jQuery.parseJSON(funk1);
                 console.log(values);
                 let tablehtml = `<table class=table table-bordered>
-                    <tr>
-                    <th>Personel ID</th>
-                    <th>Personel Adı</th>
-                    <th>Personel Soyadı</th>
-                    <th>Personel Maaş</th>
-                    </tr>`
+                                    <tr>
+                                    <th>Personel ID</th>
+                                    <th>Personel Adı</th>
+                                    <th>Personel Soyadı</th>
+                                    <th>Personel Maaş</th>
+                                    </tr>`
 
                 $.each(values, (index, value) => {
                     tablehtml += `<tr>
-                     <td>${value.EmployeeId}</td>
-                     <td>${value.EmployeeName}</td>
-                     <td>${value.EmployeeSurname}</td>
-                     <td>${value.EmployeeSalary}</td>
-                     </tr>`
+                                     <td>${value.EmployeeId}</td>
+                                     <td>${value.EmployeeName}</td>
+                                     <td>${value.EmployeeSurname}</td>
+                                     <td>${value.EmployeeSalary}</td>
+                                     </tr>`
 
                 });
                 tablehtml += `</table>`;
@@ -65,7 +93,7 @@
         });
     });
 
-    $("#btnemployeecreate").click(function (){
+    $("#btnemployeecreate").click(function () {
         let employeevalues = {
             EmployeeName: $("#txtname").val(),
             EmployeeSurname: $("#txtsurname").val(),
@@ -73,13 +101,81 @@
 
         };
         $.ajax({
-            type:"post",
-            url:"/Employee/CreateEmployee/",
-            data:employeevalues,
-            success:function (funk2){
+            type: "post",
+            url: "/Employee/CreateEmployee/",
+            data: employeevalues,
+            success: function (funk2) {
                 let result = jQuery.parseJSON(funk2);
                 alert("PErsonel başarıyla eklendi");
             }
         })
     })
+
+    $("#btnemployeeget").click(function () {
+        let id = $("#txtemployeeid").val();
+
+        $.ajax({
+            contentType: "application/json/",
+            dataType: "json",
+            url: "/Employee/GetEmployee/",
+            data: { EmployeeId: id },
+            success: function (funk3) {
+                let result = jQuery.parseJSON(funk3);
+                console.log(result);
+
+                let htmlstr = `<table class =table table-hover>
+                    <tr>
+                    <th>Personel Id </th>
+                    <th>Personel Adı </th>
+                    <th>Personel Soyadı </th>
+                    <th>Personel Maaş </th>
+                        </tr>
+                        <tr>
+                        <td>${result.EmployeeId}</td>
+                        <td>${result.EmployeeName}</td>
+                        <td>${result.EmployeeSurname}</td>
+                        <td>${result.EmployeeSalary}</td>
+                         </tr>
+                         </table> `;
+                $("#employeelistbyid").html(htmlstr);
+
+
+            }
+        });
+    });
+
+    $("#btnemployeedelete").click(function () {
+        let id = $("#txtdeletedemployeeid").val();
+
+        $.ajax({
+            url: "/Employee/DeleteEmployee/" + id,
+            type: "Get",
+            contentType: "application/json",
+            success: function (funk4) {
+                swal("Personel Başarıyla Silindi");
+            }
+        });
+    });
+
+    $("#btnemployeeupdate").click(function () {
+        let values = {
+            EmployeeID: $("#txtidedit").val(),
+            EmployeeName: $("#txtnameedit").val(),
+            EmployeeSurname: $("#txtsurnameedit").val(),
+            EmployeeSalary: $("#txtsalaryedit").val()
+        };
+        $.ajax({
+            url: "/Employee/UpdateEmployee/",
+            type: "post",
+            data: values,
+            success: function (funk5) {
+                swal("Güncelleme Başarıyla Yapıldı");
+            }
+        });
+    });
+
+
+
 </script>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
